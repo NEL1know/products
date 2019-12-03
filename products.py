@@ -1,22 +1,28 @@
 #記帳程式專案
 #使用二維清單紀錄每次購買的商品及價格
 
-#讀取檔案
+import os # operating system
 products = []
-with open('products.csv','r', encoding='utf-8') as f:
-	for line in f:
-		if '商品,價格' in line:
-			continue #skip 到下一圈
-		#strip()將空格跟分行脫掉
-		#split(',')用逗號切割,切割完的結果是清單
-		#s = line.strip().split(',')
-		#name = s[0]
-		#price = s[1]
-		#原始有1個逗號,2個內容物,也可以如下寫法,分別儲存到2個變數中 
-		name, price = line.strip().split(',')
-		products.append([name,price]) 
 
-print(products)
+#檢查檔案在不在
+if os.path.isfile('products.csv'): #只給檔名,即相對路徑.
+	print('yeah 找到檔案了')
+	#讀取檔案	
+	with open('products.csv','r', encoding='utf-8') as f:
+		for line in f:
+			if '商品,價格' in line:
+				continue #skip 到下一圈
+			#strip()將空格跟分行脫掉
+			#split(',')用逗號切割,切割完的結果是清單
+			#s = line.strip().split(',')
+			#name = s[0]
+			#price = s[1]
+			#原始有1個逗號,2個內容物,也可以如下寫法,分別儲存到2個變數中 
+			name, price = line.strip().split(',')
+			products.append([name,price]) 
+	print(products)
+else:
+	print('找不到檔案')
 
 #讓使用者輸入
 while True:
