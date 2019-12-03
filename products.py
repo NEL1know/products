@@ -1,14 +1,11 @@
 #記帳程式專案
 #使用二維清單紀錄每次購買的商品及價格
-
 import os # operating system
-products = []
 
-#檢查檔案在不在
-if os.path.isfile('products.csv'): #只給檔名,即相對路徑.
-	print('yeah 找到檔案了')
+def read_file(filename):
+	products = []
 	#讀取檔案	
-	with open('products.csv','r', encoding='utf-8') as f:
+	with open(filename,'r', encoding='utf-8') as f:
 		for line in f:
 			if '商品,價格' in line:
 				continue #skip 到下一圈
@@ -20,35 +17,51 @@ if os.path.isfile('products.csv'): #只給檔名,即相對路徑.
 			#原始有1個逗號,2個內容物,也可以如下寫法,分別儲存到2個變數中 
 			name, price = line.strip().split(',')
 			products.append([name,price]) 
-	print(products)
-else:
-	print('找不到檔案')
+	return products
+	
 
-#讓使用者輸入
-while True:
-	name =  input('請輸入商品名稱(離開請輸入q): ')
-	if name == 'q':
-		break
-	price = input('請輸入商品價格: ')
-	price = int(price)
-	# 方式一
-	# p = []
-	# p.append(name)
-	# p.append(price)
-	# products.append(p)
-	# 方式二
-	# p = [name,price]
-	# products.append(p)
-	#簡易版寫法如下，不用創新空清單再append內容進清單
-	products.append([name,price]) 
-print(products)
+def user_input(products):
+	#讓使用者輸入
+	while True:
+		name =  input('請輸入商品名稱(離開請輸入q): ')
+		if name == 'q':
+			break
+		price = input('請輸入商品價格: ')
+		price = int(price)
+		# 方式一
+		# p = []
+		# p.append(name)
+		# p.append(price)
+		# products.append(p)
+		# 方式二
+		# p = [name,price]
+		# products.append(p)
+		#簡易版寫法如下，不用創新空清單再append內容進清單
+		products.append([name,price]) 
+	return products
 
-# 印出所有購買紀錄
-for p in products:
-	print(p[0], '的價格', p[1])
-
-# 寫入檔案
-with open('products.csv', 'w', encoding='utf-8') as f:
-	f.write('商品,價格\n')
+def print_products(products):
+	# 印出所有購買紀錄
 	for p in products:
-		f.write(p[0] + ',' + str(p[1]) + '\n')
+		print(p[0], '的價格', p[1])
+
+def write_file(filename, products):
+	# 寫入檔案
+	with open(filename, 'w', encoding='utf-8') as f:
+		f.write('商品,價格\n')
+		for p in products:
+			f.write(p[0] + ',' + str(p[1]) + '\n')
+
+def main():
+	#檢查檔案在不在
+	filename = 'products.csv'
+	if os.path.isfile(filename): #只給檔名,即相對路徑.
+		print('yeah 找到檔案了')
+		products = read_file(filename)
+	else:
+		print('找不到檔案')
+	products = user_input(products)
+	print_products(products)
+	write_file(filename, products)
+
+main()
